@@ -1,28 +1,25 @@
 const express  = require("express")
 require("dotenv").config()
 const cors = require("cors")
-const {connection}   = require("../Backend/configs/db")
-const {userRoutes} = require("../Backend/routes/User.route")
-const {productRoutes} = require("../Backend/routes/Product.route")
+const connect   = require("./configs/db")
+const {userRoutes} = require("./routes/User.route")
+const {productRoutes} = require("./routes/Product.route")
+const {orderRoutes} = require("./routes/Order.route")
 
 const app  = express()
-app.use(cors({
-    origin:"*"
-}))
+app.use(cors())
 
 app.use(express.json())
+
 app.get("/",(req,res) => {
     res.send("Hello Boy")
 })
+
 app.use("/user",userRoutes)
 app.use("/product",productRoutes)
+app.use("/order",orderRoutes)
 
-app.listen(process.env.port,async(req,res) => {
-    try{
-         await connection
-         console.log(`Server Run Successfully at port number ${process.env.port}`);
-    }catch(err){
-        console.log(" Trouble connecting to the DB");
-        res.send("Trouble connecting to the DB")
-    }
+app.listen(process.env.port,async ()=>{
+    await connect()
+    console.log("server is running on port 8080")
 })
