@@ -7,7 +7,7 @@ import { Home } from "../Pages/Home"
 import { Login } from "../Pages/Login"
 import { Orders } from "../Pages/Orders"
 import { Payment } from "../Pages/Payment"
-import { Products } from "../Pages/Products"
+import  Products  from "../Pages/Products"
 import { SignUp } from "../Pages/SignUP"
 import { SingleProduct } from "../Pages/SingleProduct"
 export const AllRoutes = () =>{

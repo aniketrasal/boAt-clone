@@ -1,9 +1,9 @@
-import { Text,Box, Input, Image } from "@chakra-ui/react"
+import { Text,Box, Image } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import {AiOutlineUser,AiOutlineSearch} from "react-icons/ai"
+import {AiOutlineSearch} from "react-icons/ai"
 import {BsChevronDown} from "react-icons/bs"
 import { DrawerExample } from "./CartDrawer"
-import Type from "./Type"
+// import Type from "./Type"
 import { TypewriterInput } from "./TypeWritter"
 import { LoginButton } from "./LoginModal"
 
