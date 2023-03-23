@@ -31,12 +31,14 @@ const getProductsSuccess = (payload) => {
 //     .catch((err) => dispatch(getProductsFailure()))
 // }
 
-export const getProducts = () => (dispatch) => {
+export const getProducts = (payload) => (dispatch) => {
+    console.log("payload",payload);
     dispatch(getProductsRequest())
+    // https://super-boa-panama-hat.cyclic.app/product?page=1&limit=10
     axios.get(`https://super-boa-panama-hat.cyclic.app/product`)
         .then((res) => {
-            // console.log(res.data)
-            dispatch(getProductsSuccess(res.data))
+            console.log(res.data.products)
+            dispatch(getProductsSuccess(res.data.products))
         })
         .catch((err) => dispatch(getProductsFailure()))
 }

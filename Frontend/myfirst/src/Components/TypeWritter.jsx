@@ -1,10 +1,13 @@
-import { Input } from "@chakra-ui/react";
+import { Input, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-export function TypewriterInput() {
+import Search from "./Search";
+
+export function TypewriterInput({ setIsTrue }) {
   const [text, setText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
   const [letterIndex, setLetterIndex] = useState(0);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,5 +24,9 @@ export function TypewriterInput() {
 
   const words = ["Earphones", "Smartwatches", "Speakers"];
 
-  return <Input className="TypewriterInput" fontSize={"18px"} width={"65%"} value={text} readOnly />;
+  return <div>
+     
+      <Input  border={"0px solid "} className="TypewriterInput" fontSize={"18px"} width={"65%"} value={text} readOnly />
+
+  </div>
 }

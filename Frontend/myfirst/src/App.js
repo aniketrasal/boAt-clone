@@ -1,4 +1,5 @@
 import './App.css';
+import Footer from './Components/Footer';
 import { LoginButton } from './Components/LoginModal';
 import { Navbar } from './Components/Navbar';
 import { TypewriterInput } from './Components/TypeWritter';
@@ -9,6 +10,7 @@ function App() {
     <div className="App">
       <Navbar/>
       <AllRoutes/>
+    <Footer/>
     </div>
   );
 }

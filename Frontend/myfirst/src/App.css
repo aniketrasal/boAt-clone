@@ -49,3 +49,14 @@
   caret-color: transparent;
 }
 
+.active{
+  border: 2px solid red;
+  border-radius: 10px ;
+  background-color: #fbd2d3;
+  margin: 3%;
+}
+.disable{
+  border-radius: 10px ;
+  background-color: 
+  #e1e1e1 ;
+}
