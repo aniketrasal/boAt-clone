@@ -22,14 +22,14 @@ import { decreaseQuantity, increaseQuantity, removeItem } from '../Redux/CartRed
 
 export function DrawerExample() {
   const cart = useSelector((store) => store.carts.cart)
-  console.log("cart", cart);
+  // console.log("cart", cart);
   const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   
 
   const handleDec = (id,qty) => {
-    console.log("handleDec",id)
+    // console.log("handleDec",id)
     if(qty > 1){
       dispatch(decreaseQuantity(id))
     }else {
@@ -38,18 +38,32 @@ export function DrawerExample() {
   }
   
   const handleInc = (id) => {
-    console.log("handleInc",id)
+    // console.log("handleInc",id)
     dispatch(increaseQuantity(id))
   }
 
   let totalAmount = 0
   const convertToNumber  = (str) => {
-    console.log("str",str);
+    // console.log("str",str);
+    if(Number(str)){
+      return Number(str) 
+      // let value = Number(str)
+      // console.log("value",value);
+    }
+        let arr  = str.includes(",") ? str.split(","):[]
+        let final_str = arr.reduce((acc,value) =>  acc + value,"")
+        // console.log("final_str",final_str);
+        let result = Number(final_str)
+        // console.log(result);
+        return result
+
+
   }
   cart.forEach((prod) => {
-    console.log(convertToNumber(prod.price));
+    // console.log(convertToNumber(prod.price)*prod.qty);
+    totalAmount += convertToNumber(prod.price)*prod.qty
   })
-
+console.log("totalAmount",totalAmount);
   return (
     <>
       <Button ref={btnRef} colorScheme='white' color={"black"} onClick={onOpen}>
@@ -85,10 +99,10 @@ export function DrawerExample() {
                         </Flex>
                       </Box>
                       <Box>
-                        <Flex border={"2px solid gray"} h={"30px"}>
-                          <Button borderRadius={"0px "} borderRight={"1px solid gray"} color={"red"} p={"1px"} h={"100%"} background={"none"} onClick={() => handleDec(ele._id,ele.qty)}>-</Button>
+                        <Flex border={"3px solid #dfdfdf"} h={"30px"}>
+                          <Button borderRadius={"0px "} borderRight={"2px solid #dfdfdf"} color={"red"} p={"1px"} h={"100%"} background={"none"} onClick={() => handleDec(ele._id,ele.qty)}>-</Button>
                           <Button color={"black"} h={"100%"} background={"none"}>{ele.qty}</Button>
-                          <Button borderRadius={"0px "} borderLeft={"1px solid gray"} color={"red"} h={"100%"} background={"none"} onClick={() => handleInc(ele._id,ele.qty)}>+</Button>
+                          <Button borderRadius={"0px "} borderLeft={"2px solid #dfdfdf"} color={"red"} h={"100%"} background={"none"} onClick={() => handleInc(ele._id,ele.qty)}>+</Button>
                         </Flex>
                       </Box>
                     </Box>

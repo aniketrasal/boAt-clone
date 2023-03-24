@@ -44,8 +44,26 @@ export function ChooseDrawer({ ele,setIsTrue,isTrue }) {
 
     const handleAddToCart = (ele) => {
         console.log("add to cart",ele);
+        let payload = {
+            _id:ele._id,
+            priority: ele.priority,
+            priority2: ele.priority2,
+            priority3: ele.priority3,
+            product_item__aspect_ratio_href: ele.product_item__aspect_ratio_href,
+            product_item__primary_image_src: image,
+            product_item_meta__title: ele.product_item_meta__title,
+            rating__stars:ele.rating__stars,
+            rating__caption:ele.rating__caption,
+            m_0:ele.m_0,
+            price:ele.price,
+            price_2:ele.price_2,
+            visually_hidden_3:ele.visually_hidden_3,
+            product_item__quick_buy_button_2:ele.product_item__quick_buy_button_2,
+            visually_hidden_4:ele.visually_hidden_4,
+            ml_2:ele.ml_2 
+        }
         setIsTrue(!isTrue)
-        dispatch(addToCart(ele))
+        dispatch(addToCart(payload))
     }
 
     return (
