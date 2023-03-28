@@ -3,14 +3,42 @@ const { ProductModel } = require("../models/Product.model")
 const productRoutes = express.Router()
 
 productRoutes.get("/", async (req, res) => {
-    let page = Number(req.query.page) || 1
-    let limit = Number(req.query.limit) || 10
-    console.log("page",page);
-    console.log("limit",limit);
-    let skip = (page - 1) * limit
+    let page = parseInt(req.query.page) || 1
+    let limit = parseInt(req.query.limit) || 10
+    let search = req.query.search || ""
+    let sort = req.query.sort || "rating__stars"
+    let category = req.query.category || "All"
+
+    const categoryOptions = [
+        "Earphones",
+        "Watch",
+        "Speakers",
+        "Power Banks",
+        "headphones"
+    ]
+
+    category === "All"
+    ?(category = [...category])
+    :(category = req.query.category.split(","));
+
+    req.query.sort?  (sort = req.query.sort.split(",")): (sort = [sort])
+    
+    let sortBy = {}
+    if(sort[1]){
+        sortBy[sort[0]] = sort[1]
+    }else{
+        sortBy[sort[0]] = "asc"
+    }
+    // console.log("page",page);
+    // console.log("limit",limit);
+    // let skip = (page - 1) * limit
+
     try {
  
-        let productsItem = await ProductModel.find().skip(skip).limit(limit)
+        let productsItem = await (await ProductModel.find({category:{$regex:search,$options:"i"}}).where("category")).in([...category]).sort(sortBy).skip(page * limit).limit(limit)
+        const total = await ProductModel.countDocuments({
+            category:{$in:[...category]},
+        })
         res.send({page: page,limit:limit,products:productsItem})
         // console.log(productsItem);
     } catch (err) {
