@@ -2,7 +2,7 @@ const mongoose  = require("mongoose")
 
 const checkoutSchema = mongoose.Schema({
     pincode :{type: Number,required:true},
-    city:{type: String,required:true},
+    city:{type: String,required:true} ,
     state:{type: String,required:true},
     fullName:{type: String,required:true},
     email:{type: String,required:true},
