@@ -19,21 +19,63 @@ productRoutes.get("/", async (req, res) => {
           let product = await  getData()
         //   console.log("product => ",product)
         // res.send(product)
-        let page = Number(req.query.page) || 0
+        let page = Number(req.query.page) -1 || 0
         let limit = Number(req.query.limit) || product.length
-        // console.log("page",page);
-        // console.log("limit",limit);
+        let sort = req.query.sort ||  "rating"
+        let category = req.query.category || "All"
         let skip = (page - 0) * limit
         const search = req.query.q
         const queryObj = {}
+        let categoryOption = [
+            "Airdopes True Wireless",
+            "Rockerz Wireless",
+            "Smart Watches",
+            "Bassheads Wired",
+            "Stone Speakers",
+            "Aavante Home Audio",
+            "Mobile Accessories",
+            "Trebel for Women",
+            "Limited Edition",
+            "Misfit Trimmers",
+            "Immortal Gaming",
+        ]
+        category === "All"
+        ?(category = [...categoryOption]):
+        (category=req.query.category.split(","))
+        req.query.sort?(sort = req.query.sort.split(",")):(sort = [sort])
+
+        let sortBy={}
+
+        if(sort[1]){
+            sortBy[sort[0]]=sort[1]
+        }else{
+            sortBy[sort[0]]="asc";
+        }
 
         if (search) {
             queryObj.name = { $regex: search, $options: "i" }
         }
         // console.log(queryObj.name)
-        let productsItem = await ProductModel.find(queryObj).skip(skip).limit(limit)
-        res.status(200).json(productsItem)
+        let productsItem = await ProductModel.find(queryObj)
+        .where("category")
+        .in([...category])
+        .sort(sortBy)
+        .skip(skip)
+        .limit(limit)
 
+        const total = await ProductModel.countDocuments({
+            category:{$in:[...category]},
+            // queryObj.name :{ $regex: search, $options: "i" }
+        })
+        const response = {
+            error:false,
+            total,
+            page:page+1,
+            limit,
+            category:categoryOption,
+            productsItem
+        }
+        res.status(200).json(response)
     } catch (err) {
         res.send("Products Can't get from the Database")
     }
