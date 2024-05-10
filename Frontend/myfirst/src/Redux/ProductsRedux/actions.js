@@ -35,10 +35,10 @@ export const getProducts = (payload) => (dispatch) => {
     console.log("payload",payload);
     dispatch(getProductsRequest())
     // https://super-boa-panama-hat.cyclic.app/product?page=1&limit=10
-    axios.get(`https://super-boa-panama-hat.cyclic.app/product`)
+   return axios.get(`https://super-boa-panama-hat.cyclic.app/product/`)
         .then((res) => {
-            console.log(res.data.products)
-            dispatch(getProductsSuccess(res.data.products))
+            console.log(res.data.productsItem)
+            dispatch(getProductsSuccess(res.data.productsItem))
         })
         .catch((err) => dispatch(getProductsFailure()))
 }

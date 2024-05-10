@@ -19,14 +19,108 @@ productRoutes.get("/", async (req, res) => {
           let product = await  getData()
         //   console.log("product => ",product)
         // res.send(product)
-        let page = Number(req.query.page) -1 || 0
-        let limit = Number(req.query.limit) || product.length
-        let sort = req.query.sort ||  "rating"
-        let category = req.query.category || "All"
-        let skip = (page - 0) * limit
-        const search = req.query.q
-        const queryObj = {}
-        let categoryOption = [
+        // let page = Number(req.query.page) || 1
+        // let limit = Number(req.query.limit) || Number(product.length)
+        // let sort = req.query.sort ||  "rating"
+        // let category = req.query.category || "All"
+        // let skip = (page - 1) * limit
+        // const search = req.query.q
+        // const queryObj = {}
+        // let categoryOption = [
+        //     "Airdopes True Wireless",
+        //     "Rockerz Wireless",
+        //     "Smart Watches",
+        //     "Bassheads Wired",
+        //     "Stone Speakers",
+        //     "Aavante Home Audio",
+        //     "Mobile Accessories",
+        //     "Trebel for Women",
+        //     "Limited Edition",
+        //     "Misfit Trimmers",
+        //     "Immortal Gaming",
+        // ]
+        // category === "All"
+        // ?(category = [...categoryOption]):
+        // (category=req.query.category.split(","))
+        // req.query.sort?(sort = req.query.sort.split(",")):(sort = [sort])
+
+        // let sortBy={}
+
+        // if(sort[1]){
+        //     sortBy[sort[0]]=sort[1]
+        // }else{
+        //     sortBy[sort[0]]="asc";
+        // }
+
+        // if (search) {
+        //     queryObj.name = { $regex: search, $options: "i" }
+        // }
+        // // console.log(queryObj.name)
+        // let productsItem = await ProductModel.find(queryObj)
+        // .where("category")
+        // .in([...category])
+        // .sort(sortBy)
+        // .skip(skip)
+        // .limit(limit)
+
+        // // const total = await ProductModel.countDocuments({
+        // //     category:{$in:[...category]},
+        // //     // queryObj.name :{ $regex: search, $options: "i" }
+        // // })
+        // const response = {
+        //     error:false,
+        //     page:page+1,
+        //     limit,
+        //     // category:categoryOption,
+        //     productsItem
+        // }
+        // res.status(200).json(response)
+
+    // const searchQuery = req.query.q;
+    // const sortBy = req.query.sortBy;
+    // const filterBy = req.query.filterBy;
+    // const page = Number(req.query.page) || 1;
+    // const limit = Number(req.query.limit) || product.length;
+
+    // const startIndex = (page - 1) * limit;
+    // const endIndex = page * limit;
+
+    // const result = {};
+
+    // const searchFilter = {
+    //     $or: [
+    //         { $name: { $regex: searchQuery, $options: 'i' } } 
+    //     ]
+    // };
+
+    // const sortFilter = sortBy ? { [sortBy]: 1 } : {};
+
+    // const filterFilter = filterBy ? JSON.parse(filterBy) : {};
+
+    // if (endIndex < await ProductModel.countDocuments().exec()) {
+    //     result.next = {
+    //         page: page + 1,
+    //         limit: limit
+    //     };
+    // }
+
+    // if (startIndex > 0) {
+    //     result.previous = {
+    //         page: page - 1,
+    //         limit: limit
+    //     };
+    // }
+
+    // result.results = await ProductModel.find(searchFilter).sort(sortFilter).where(filterFilter).limit(limit).skip(startIndex).exec();
+
+    // res.send(result);
+        const page = parseInt(req.query.page) - 1 || 0;
+		const limit = parseInt(req.query.limit) || product.length;
+		const search = req.query.search || "";
+		let sort = req.query.sort || "rating";
+		let category = req.query.category || "All";
+
+		  let categoryOption = [
             "Airdopes True Wireless",
             "Rockerz Wireless",
             "Smart Watches",
@@ -39,43 +133,39 @@ productRoutes.get("/", async (req, res) => {
             "Misfit Trimmers",
             "Immortal Gaming",
         ]
-        category === "All"
-        ?(category = [...categoryOption]):
-        (category=req.query.category.split(","))
-        req.query.sort?(sort = req.query.sort.split(",")):(sort = [sort])
+		category === "All"
+			? (category = [...categoryOption])
+			: (category = req.query.category.split(","));
+		req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
 
-        let sortBy={}
+		let sortBy = {};
+		if (sort[1]) {
+			sortBy[sort[0]] = sort[1];
+		} else {
+			sortBy[sort[0]] = "asc";
+		}
 
-        if(sort[1]){
-            sortBy[sort[0]]=sort[1]
-        }else{
-            sortBy[sort[0]]="asc";
-        }
+		const movies = await ProductModel.find({ name: { $regex: search, $options: "i" } })
+			.where("category")
+			.in([...category])
+			.sort(sortBy)
+			.skip(page * limit)
+			.limit(limit);
 
-        if (search) {
-            queryObj.name = { $regex: search, $options: "i" }
-        }
-        // console.log(queryObj.name)
-        let productsItem = await ProductModel.find(queryObj)
-        .where("category")
-        .in([...category])
-        .sort(sortBy)
-        .skip(skip)
-        .limit(limit)
+		// const total = await ProductModel.countDocuments({
+		// 	category: { $in: [...category] },
+		// 	name: { $regex: search, $options: "i" },
+		// });
 
-        const total = await ProductModel.countDocuments({
-            category:{$in:[...category]},
-            // queryObj.name :{ $regex: search, $options: "i" }
-        })
-        const response = {
-            error:false,
-            total,
-            page:page+1,
-            limit,
-            category:categoryOption,
-            productsItem
-        }
-        res.status(200).json(response)
+		const response = {
+			error: false,
+			page: page + 1,
+			limit,
+			category: categoryOption,
+			movies,
+		};
+
+		res.send(response);
     } catch (err) {
         res.send("Products Can't get from the Database")
     }

@@ -38,7 +38,7 @@ const Products = () => {
   <SimpleGrid columns={{sm:1,md:2,lg:3}} gap={{md:6,lg:8}}>
         {
          products &&  products.length > 0 && products.map((ele) =>
-            <ProductCard ele={ele} key={ele.id} />
+            <ProductCard ele={ele} key={ele._id} />
           )
         }
       </SimpleGrid>

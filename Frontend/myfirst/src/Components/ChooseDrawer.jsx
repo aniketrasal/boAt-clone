@@ -32,8 +32,8 @@ export function ChooseDrawer({ ele,setIsTrue,isTrue }) {
     const [data, setData] = useState({})
 
     const [selectItem, setSelectItem] = useState(true)
-
-    const [image, setImage] = useState(ele.product_item__primary_image_src)
+    const [image, setImage] = useState(ele.image[0])
+    const [productColor, setProductColor] = useState(ele.color[0])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = React.useRef()
 
@@ -44,26 +44,12 @@ export function ChooseDrawer({ ele,setIsTrue,isTrue }) {
 
     const handleAddToCart = (ele) => {
         console.log("add to cart",ele);
-        let payload = {
-            _id:ele._id,
-            priority: ele.priority,
-            priority2: ele.priority2,
-            priority3: ele.priority3,
-            product_item__aspect_ratio_href: ele.product_item__aspect_ratio_href,
-            product_item__primary_image_src: image,
-            product_item_meta__title: ele.product_item_meta__title,
-            rating__stars:ele.rating__stars,
-            rating__caption:ele.rating__caption,
-            m_0:ele.m_0,
-            price:ele.price,
-            price_2:ele.price_2,
-            visually_hidden_3:ele.visually_hidden_3,
-            product_item__quick_buy_button_2:ele.product_item__quick_buy_button_2,
-            visually_hidden_4:ele.visually_hidden_4,
-            ml_2:ele.ml_2 
-        }
+        // let payload = {
+        //     ele
+            
+        // }
         setIsTrue(!isTrue)
-        dispatch(addToCart(payload))
+        dispatch(addToCart(ele))
     }
 
     return (
@@ -95,12 +81,11 @@ export function ChooseDrawer({ ele,setIsTrue,isTrue }) {
                                 <Box w={"100%"} bg={""} display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                                     <Image w={"150px"} src={image} />
                                     <Box w={"60%"}>
-                                        <Heading size='md' mb={"3%"} fontSize={"17px"}>{ele.product_item_meta__title}</Heading>
+                                        <Heading size='md' mb={"3%"} fontSize={"17px"}>{ele.name}</Heading>
 
                                         <Flex mb={"3%"} bg={""} display={"flex"} alignItems={"center"} justifyContent={"flex-start"}>
-                                            <Text mr={"4%"} fontSize={"18px"} fontWeight={"bold"} color={"red"}>{ele.price}</Text>
-                                            <Text mr={"4%"} fontSize={"18px"} fontWeight={"500"} color={"#6ab05e"}>{ele.m_0}</Text>
-                                            <Text as='s' mr={"2%"} fontSize={"15px"} fontWeight={"500"} color={"black"} mb={"-2px"}>{ele.price_2}</Text>
+                                            <Text mr={"4%"} fontSize={"18px"} fontWeight={"bold"} color={"red"}><span>₹</span> {ele.original_price}</Text>
+                                            <Text mr={"4%"} fontSize={"18px"} fontWeight={"500"} color={"#6ab05e"}>{ele.discount}<span>%</span></Text>
                                         </Flex>
                                         <hr w={"50px"} h={"100px"} color={"red"} />
                                         <UnorderedList styleType={"square"} mt={"3%"}>
@@ -113,16 +98,26 @@ export function ChooseDrawer({ ele,setIsTrue,isTrue }) {
 
                                 </Box>
                                 <Box w={"100%"} h={"100px"} bg={""}  >
-                                    <Heading fontSize={"15px"}><span style={{ color: "gray" }} >Color :</span>Active Black</Heading>
+                                    <Heading fontSize={"15px"}><span style={{ color: "gray" }} >Color :</span>Active {productColor}</Heading>
                                     <Flex p={"2% 0"} display={"flex"} alignItems={"center"} justifyContent={"flex-start"}>
-                                        <Image p={"1%"} w={"80px"} src={ele.product_item__primary_image_src} onClick={() => {
-                                            setImage(ele.product_item__primary_image_src)
-                                            setSelectItem(true)
-                                        }} cursor={"pointer"} className={selectItem ? "active" : "disable"} />
-                                        <Image p={"1%"} w={"80px"} src={ele.product_item__secondary_image_src} onClick={() => {
-                                            setImage(ele.product_item__secondary_image_src)
-                                            setSelectItem(false)
-                                        }} cursor={"pointer"} className={selectItem ? "disable" : "active"} />
+                                       {
+                                        ele.image.map((item,index) => 
+                                        <Image p={"1%"} w={"80px"} src={item} onClick={() => {
+                                            setImage(item)
+                                            setSelectItem(!selectItem)
+                                            setProductColor(ele.color[index])
+                                        }} cursor={"pointer"} 
+                                        
+                                        // className={selectItem ? "active" : "disable"} 
+                                    //     style={({ isActive }) =>
+                                    //     isActive
+                                    //       ? "active"
+                                    //       :"disable"
+                                    //   }
+                                        />
+                                        )
+                                       }
+                        
                                     </Flex>
                                 </Box>
                             <Box mt={"15%"} h={"auto"} bg={"gray"} display={"flex"}  alignItems={"center"} justifyContent={"center"}>
